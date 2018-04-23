@@ -21,7 +21,7 @@ class ImageGenerator():
     def __call__(self):
         rows = 10
         cols = 10
-        previewdir = "C:/project/python/flask_gan/results/"
+        previewdir = "./results/"
 
         z = Variable(np.asarray(self.gen.make_hidden(rows * cols)))
 

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request
 import base64
 from io import BytesIO
 import glob
@@ -6,23 +6,16 @@ import os
 from PIL import Image
 import image_generator
 import random
+import pdb
 
 app = Flask(__name__)
 resultpath = './results/*'
 n_hidden = 100
 
-@app.route('/')
-def hello():
-    name = "hello World"
-    return name
 
-@app.route('/good')
-def good():
-    name = "good"
-    return name
-
-@app.route('/render')
+@app.route('/', methods=['GET', 'POST'])
 def render():
+            
     files = glob.glob(resultpath)
 
     img_read = Image.open(random.choice(files))
@@ -38,10 +31,14 @@ def render():
         generated_image_name = name
     )
 
-@app.route('/generate')
+@app.route('/load', methods=['GET','POST'])
+def load():
+    return redirect('/', code=303)
+
+@app.route('/generate', methods=['GET','POST'])
 def generate():
     regenerate()
-    return redirect('/render', code=303)
+    return redirect('/', code=303)
 
 def regenerate():
     files = glob.glob(resultpath)
@@ -54,4 +51,4 @@ def regenerate():
     return
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False, port=22222)
