@@ -9,14 +9,17 @@ import numpy as np
 from PIL import Image
 
 import os
+import random
 
 class ImageGenerator():
 
     def __init__(self, n_hidden):
         self.n_hidden = n_hidden
         self.gen = Generator(self.n_hidden)
-        chainer.serializers.load_npz('./gen_iter_41200.npz', self.gen)
-
+        if(random.randint(0,1) == 0):
+            chainer.serializers.load_npz('./gen_iter_41200.npz', self.gen)
+        else:
+            chainer.serializers.load_npz('./gen_iter_41100.npz', self.gen)
 
     def __call__(self):
         rows = 10
