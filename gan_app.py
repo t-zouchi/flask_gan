@@ -6,19 +6,20 @@ import os
 from PIL import Image
 import image_generator
 import random
-import pdb
 
 app = Flask(__name__)
 resultpath = './results/*'
 n_hidden = 100
-
+file_list = []
 
 @app.route('/', methods=['GET', 'POST'])
 def render():
-            
-    files = glob.glob(resultpath)
 
-    img_read = Image.open(random.choice(files))
+    files = glob.glob(resultpath)
+    load_file = random.choice(files)
+    file_list.insert(0, load_file)
+
+    img_read = Image.open(load_file)
     buf = BytesIO()
     img_read.save(buf, format="png")
     im_b64str = base64.b64encode(buf.getvalue()).decode("utf-8")
@@ -28,8 +29,13 @@ def render():
 
     return render_template("index.html",
         generated_image_b64=im_b64data,
-        generated_image_name = name
-    )
+        generated_image_name = name,
+        list = file_list
+        )
+
+@app.route('/load_old',methods=['GET', 'POST'])
+def load_old():
+    return redirect('/', code=303)
 
 @app.route('/load', methods=['GET','POST'])
 def load():
@@ -37,8 +43,30 @@ def load():
 
 @app.route('/generate', methods=['GET','POST'])
 def generate():
+    file_list = []
     regenerate()
     return redirect('/', code=303)
+
+@app.route('/back', methods=['GET', 'POST'])
+def back():
+    if len(file_list) > 1:
+        img_read = Image.open(file_list[1])
+        file_list.insert(0, file_list[1])
+        name = os.path.basename(file_list[1])
+    else:
+        return redirect('/', code=303)
+
+    buf = BytesIO()
+    img_read.save(buf, format="png")
+    im_b64str = base64.b64encode(buf.getvalue()).decode("utf-8")
+    im_b64data = "data:image/png;base64,{}".format(im_b64str)
+
+
+    return render_template("index.html",
+        generated_image_b64=im_b64data,
+        generated_image_name = name,
+        list = file_list
+        )
 
 def regenerate():
     files = glob.glob(resultpath)

@@ -9,10 +9,9 @@
 </head>
 
 <body>
-   
+
     <h1 style="text-align:center">insta ba AI</h1>
-    
-    
+
     <br/>
     <img src="{{generated_image_b64}}" alt="{{generated_image_name}}" class="img-responsive center-block">
 
@@ -28,7 +27,14 @@
                 <button type="submit" name="rare" class="btn btn-default btn-lg col-sm-3">新しい画像を生成する </button>
             </form>
             <div class="col-sm-2"></div>
-
-    </div>    
+    </div>
+    <br/>
+    <div class="btn-toolbar">
+        <div class="col-sm-2"></div>
+            <form action="/back" method="post" name="rare" class="form-inline">
+                <button type="submit" name="rare" class="btn btn-default btn-lg col-sm-3">さっきの画像をもう1回出す </button>
+            </form>
+            <div class="col-sm-7"></div>
+    </div>
 </body>
 </html>
