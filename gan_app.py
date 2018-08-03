@@ -5,6 +5,7 @@ import glob
 import os
 from PIL import Image
 import image_generator
+import pggan_generator
 import random
 
 app = Flask(__name__)
@@ -74,8 +75,14 @@ def regenerate():
         for file in files:
             os.remove(file)
 
-    imgen = image_generator.ImageGenerator(n_hidden)
-    imgen()
+    if(random.randint(0,1) == 0):
+        imgen = image_generator.ImageGenerator(n_hidden)
+        imgen()
+    else:
+        pgan = pggan_generator.PgganGenerator(6)
+        pgan(100)
+
+
     return
 
 if __name__ == "__main__":
